@@ -1,29 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import {
-  rotulo_btn_cadastro_meta,
-  rotulo_input_meta,
-  rotulo_lista_metas,
-} from './mensagens';
+import { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import MetaInput from './components/MetaInput';
+import MetasList from './components/MetasList';
 
 export default function App() {
+  const [metas, setMetas] = useState([]);
+
+  function adicionarMetaHandler(inputMeta) {
+    if (inputMeta.trim() === '') return; // Evita adicionar metas em branco
+    setMetas(metasAtuais => [...metasAtuais, inputMeta]);
+  }
+
   return (
     <View style={styles.mainContainer}>
       
-      <View style={styles.inputRow}>
-        <View style={{ width: '65%' }}>
-          <TextInput
-            style={styles.inputText}
-            placeholder={rotulo_input_meta}
-          />
-        </View>
-        <View style={{ width: '30%' }}>
-          <Button title={rotulo_btn_cadastro_meta} />
-        </View>
-      </View>
+      {/* Componente de entrada recebendo a função de adicionar metas */}
+      <MetaInput onAddMeta={adicionarMetaHandler} />
 
+      {/* Componente de lista recebendo o array de metas atualizado */}
       <View style={styles.metaContainer}>
-        <Text>{rotulo_lista_metas}</Text>
+        <MetasList array={metas} />
       </View>
 
     </View>
@@ -31,27 +27,12 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
   mainContainer: {
     padding: 30,
+    paddingTop: 50,
     flex: 1,
     flexDirection: 'column',
   },
-
-  inputRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-
-  inputText: {
-    borderColor: '#cccccc',
-    borderWidth: 1,
-  },
-
   metaContainer: {
     flex: 1,
     marginTop: 20,
